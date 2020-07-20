@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -24,10 +26,12 @@ import java.util.Date;
 public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     Button addEvent, etDate, etTimeStart, etTimeEnd, decreaseBtn, increaseBtn;
     EditText etTitle, etAge, etPlace, etDesc;
-    TextView textVisitorAmount;
+    TextView textVisitorAmount, textViewIsRunning;
+    Switch aSwitch;
 
     private int timePicker;
     private int visitorAmount = 0;
+    private boolean isRunning;
 
 
     static final int TIME_DIALOG_ID = 999;
@@ -37,7 +41,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-
 
         //Initializing all attributes for create an event
         etTitle = (EditText) findViewById(R.id.etTitle);
@@ -52,6 +55,13 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         decreaseBtn = (Button) findViewById(R.id.decreaseBtn1);
         increaseBtn = (Button) findViewById(R.id.increaseBtn1);
         textVisitorAmount = (TextView) findViewById(R.id.tvVisAmount);
+
+        //EventIsRunning
+        textViewIsRunning = findViewById(R.id.swIsRunning);
+
+
+        //Button for addEvent
+        addEvent = findViewById(R.id.addEvent);
 
         decreaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,8 +111,25 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
             }
         });
 
-        //Button for addEvent
-        addEvent = findViewById(R.id.addEvent);
+
+        //SwitchListener for EventIsRunning
+        aSwitch = findViewById(R.id.swIsRunning);
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    aSwitch.setTextOn("ON");
+                    isRunning = true;
+                } else {
+                    Toast.makeText(getApplicationContext(), "Tapahtuma ei käynnissä.", Toast.LENGTH_SHORT).show();
+                    aSwitch.setTextOff("OFF");
+                    isRunning = false;
+                }
+            }
+        });
+
+        //AddEvent button
 
         addEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,15 +137,12 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 Intent intent = new Intent(CreateEventActivity.this, MainActivity.class);
 
 
-                eList.AddToArray(new Event(etTitle.getText().toString(), etDate.getText().toString(), etTimeStart.getText().toString(), etTimeEnd.getText().toString(), etAge.getText().toString(), etPlace.getText().toString(), etDesc.getText().toString(), Integer.parseInt(textVisitorAmount.getText().toString()), 1));
+                eList.AddToArray(new Event(etTitle.getText().toString(), etDate.getText().toString(), etTimeStart.getText().toString(), etTimeEnd.getText().toString(), etAge.getText().toString(), etPlace.getText().toString(), etDesc.getText().toString(), Integer.parseInt(textVisitorAmount.getText().toString()), 1, isRunning));
 
                 startActivity(intent);
             }
         });
-
-
     }
-
     public void decreaseAmount(View view) {
         visitorAmount = eList.geteList().get(view.getId()).getVisitorAmount();
     }
@@ -141,6 +165,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         String time = hourOfDay + ":" + minute;
         SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
         Date date = null;
+
         try {
             date = fmt.parse(time);
         } catch (ParseException e) {
@@ -156,8 +181,6 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
                 etTimeEnd.setText(frd);
                 break;
         }
-
-
     }
 
 

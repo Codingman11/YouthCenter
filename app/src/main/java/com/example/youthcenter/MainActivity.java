@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button button;
     RecyclerView recyclerView;
-
+    private Button feedBackBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         toLoginActivity();
         addEvent();
         recyclerView();
+        toFeedbackActivity(this);
 
     }
 
@@ -65,6 +66,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    public void toFeedbackActivity(MainActivity v) {
+        feedBackBtn = findViewById(R.id.feedbackBtn);
+
+        feedBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

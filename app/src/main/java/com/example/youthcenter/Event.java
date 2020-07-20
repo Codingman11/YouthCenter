@@ -7,8 +7,9 @@ public class Event implements Serializable {
     private int id;
     private String title, date, tStart, tEnd, age, place, desc;
     private int image, visitorAmount = 0;
+    private boolean isRunning;
 
-    public Event(String title, String date, String tStart, String tEnd, String age, String place, String desc, int visitorAmount, int image) {
+    public Event(String title, String date, String tStart, String tEnd, String age, String place, String desc, int visitorAmount, int image, boolean isRunning) {
 
 
         this.title = title;
@@ -20,9 +21,8 @@ public class Event implements Serializable {
         this.desc = desc;
         this.visitorAmount = visitorAmount;
         this.image = image;
-
+        this.isRunning = isRunning;
     }
-
 
 
     public String getAge() {
@@ -95,5 +95,13 @@ public class Event implements Serializable {
 
     public void settEnd(String tEnd) {
         this.tEnd = tEnd;
+    }
+
+    public boolean isRunning() { return isRunning; }
+
+    public void setRunning(boolean running) { isRunning = running; }
+
+    public void changeText() {
+
     }
 }

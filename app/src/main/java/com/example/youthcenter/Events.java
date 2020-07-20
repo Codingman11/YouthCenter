@@ -26,5 +26,10 @@ public class Events {
         this.eList = eList;
     }
 
+    public Event getEvent(int i) {
+        return eList.get(i);
+    }
     public void AddToArray(Event event) {eList.add(event);}
+
+
 }
