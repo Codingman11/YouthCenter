@@ -1,15 +1,18 @@
 package com.example.youthcenter.ui.login;
 
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
-
+import com.example.youthcenter.R;
 import com.example.youthcenter.data.LoginRepository;
 import com.example.youthcenter.data.Result;
 import com.example.youthcenter.data.model.LoggedInUser;
-import com.example.youthcenter.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginViewModel extends ViewModel {
 
@@ -65,6 +68,10 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        Pattern sPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&,])[A-Za-z\\d@$!%*?&,]{12,}$");
+        Matcher sMatcher = sPattern.matcher(password);
+        return password != null && sMatcher.matches();
     }
+
 }
+

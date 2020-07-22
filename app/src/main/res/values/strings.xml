@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">YouthCenter</string>
-    <string name="add_event">Add Event</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome! "</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="add_event">Lisää tapahtuma</string>
+    <string name="title_activity_login">Kirjaudu sisään</string>
+    <string name="prompt_password">Salasana</string>
+    <string name="prompt_username">Käyttäjänimi</string>
+    <string name="action_sign_in">Kirjaudu sisään tai rekisteröi</string>
+    <string name="action_sign_in_short">Kirjaudu sisään</string>
+    <string name="welcome">"Tervetuloa! "</string>
+    <string name="invalid_username">Ei kelvollinen käyttäjänimi</string>
+    <string name="invalid_password">Salasana pitää olla vähintään 12 kirjainta, 1 pieni kirjain, 1 iso kirjain, 1 numero ja 1 erikoismerkki. </string>
     <string name="login_failed">"Login failed"</string>
     <string name="username">Username</string>
     <string name="isRunning">KÄYNNISSÄ</string>
     <string name="isNotRunning">EI KÄYNNISSÄ</string>
+    <string name="nuokkari">Nuokkari</string>
 </resources>
