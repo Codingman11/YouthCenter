@@ -8,12 +8,15 @@
     android:background="@drawable/background_recyclerview"
     tools:context=".MainActivity">
 
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LinOut"
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="56dp">
 
         <Button
             android:id="@+id/btnLogin1"
@@ -42,18 +45,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/feedbackBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Palaute"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnLogin1"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

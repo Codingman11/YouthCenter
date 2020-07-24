@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
@@ -74,7 +77,10 @@ public class LoginActivity extends AppCompatActivity {
                     updateUiWithUser(loginResult.getSuccess());
                 }
                 setResult(Activity.RESULT_OK);
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                String username = usernameEditText.getText().toString();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
                 //Complete and destroy login activity once successful
                 finish();
             }
@@ -106,6 +112,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString());
+
+
                 }
                 return false;
             }

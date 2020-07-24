@@ -2,6 +2,7 @@ package com.example.youthcenter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private Context context;
     private PopupWindow popupWindow;
     private LayoutInflater layoutInflater;
-    private Button openBtn, deleteBtn, dataChangedBtn;
+    private Button openBtn, deleteBtn, dataChangedBtn, toFBBtn;
     private Switch isEveRun;
 
     public Events eList = Events.getInstance();
@@ -40,12 +41,14 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.event_list, null);
         EventViewHolder holder = new EventViewHolder(view);
+
         return holder;
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
+
         Event event = eList.geteList().get(position);
         holder.textViewTitle.setText("Otsikko: " + event.getTitle());
         holder.textViewDate.setText("Päivämäärä: " + event.getDate() + "\t klo " + event.gettStart() + " - " + event.gettEnd());
@@ -158,6 +161,18 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
         }
 
+        public void toFeedBackActivity(View v) {
+            toFBBtn = v.findViewById(R.id.toFeedBtn);
+
+            toFBBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    context.startActivity(new Intent(context, FeedbackActivity.class));
+                }
+            });
+        }
+
         public void checkSwitch(View v) {
             isEveRun = v.findViewById(R.id.swIsRunningPop);
             if (eList.geteList().get(getAdapterPosition()).isRunning() == true) {
@@ -206,8 +221,15 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
             increaseVisAm(popupView);
             checkSwitch(popupView);
             onUpdateVisAm(popupView, popupWindow);
+            toFeedBackActivity(popupView);
 
             popupWindow.update();
+        }
+
+        public  void readXML() {
+            WriteAndRead writeAndRead = WriteAndRead.getInstance();
+            writeAndRead.parseXML(context);
+            notifyItemInserted(getAdapterPosition());
         }
     }
 }

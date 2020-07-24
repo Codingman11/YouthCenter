@@ -1,5 +1,9 @@
 package com.example.youthcenter.ui.login;
 
+import android.content.SharedPreferences;
+
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Class exposing authenticated user details to the UI.
  */
@@ -9,6 +13,7 @@ class LoggedInUserView {
 
     LoggedInUserView(String displayName) {
         this.displayName = displayName;
+
     }
 
     String getDisplayName() {

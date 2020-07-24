@@ -14,7 +14,18 @@ class FeedbackList {
     }
 
     public FeedbackList() {
-        feedbackArrayList = new ArrayList<>();
+        this.feedbackArrayList = new ArrayList<>();
     }
 
+    public ArrayList<Feedback> getFeedbackArrayList() {
+        return feedbackArrayList;
+    }
+
+    public void setFeedbackArrayList(ArrayList<Feedback> feedbackArrayList) {
+        this.feedbackArrayList = feedbackArrayList;
+    }
+
+    public void addFeedback(Feedback feedback) {
+        this.feedbackArrayList.add(feedback);
+    }
 }
