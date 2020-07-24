@@ -52,6 +52,7 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
         Event event = eList.geteList().get(position);
         holder.textViewTitle.setText("Otsikko: " + event.getTitle());
         holder.textViewDate.setText("Päivämäärä: " + event.getDate() + "\t klo " + event.gettStart() + " - " + event.gettEnd());
+        holder.textViewAge.setText("Ikähaarukka: " + event.getAge());
         holder.textViewDesc.setText("Lisätiedot: " + event.getDesc());
         holder.textViewPlace.setText("Paikka: " + event.getPlace());
         holder.textViewVisAmount.setText("Kävijälaskuri: \n" + event.getVisitorAmount());
@@ -75,7 +76,7 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
     class EventViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView textViewTitle, textViewDesc, textViewPlace, textViewDate, textViewDateTime, textViewVisAmount, textViewIsRunning;
+        TextView textViewTitle, textViewDesc, textViewPlace, textViewDate, textViewAge, textViewVisAmount, textViewIsRunning;
         TextView textViewVisAmPop;
         Button increaseBtnPop, decreaseBtnPop;
         int visitorAm = 0;
@@ -89,6 +90,7 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
             textViewDesc = itemView.findViewById(R.id.textViewDesc);
             textViewPlace = itemView.findViewById(R.id.textViewPlace);
             textViewDate = itemView.findViewById(R.id.textViewDate);
+            textViewAge = itemView.findViewById(R.id.textViewAge);
             textViewVisAmount = itemView.findViewById(R.id.visitorAmount);
             textViewIsRunning = itemView.findViewById(R.id.tvIsRunning);
             dataChangedBtn = itemView.findViewById(R.id.dataChangedBtn);

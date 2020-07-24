@@ -18,21 +18,7 @@
         android:orientation="vertical"
         android:layout_marginTop="56dp">
 
-        <Button
-            android:id="@+id/btnLogin1"
-            android:layout_width="67dp"
-            android:layout_height="69dp"
-            android:layout_gravity="right"
 
-            android:background="@drawable/login_rounded"
-            android:drawableEnd="@drawable/login"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.593"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.521" />
 
         <TextView
             android:id="@+id/textView"

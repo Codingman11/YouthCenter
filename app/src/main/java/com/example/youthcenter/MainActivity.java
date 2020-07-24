@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         if (username.contains("admin")) {
             menu.add(0, 0, Menu.NONE, "Asetukset");
             menu.add(0, 1, Menu.NONE, "Tapahtumat");
+        } else if (username.contains("guest")) {
+            menu.add(0, 0, Menu.NONE, "");
         }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options, menu);
@@ -103,18 +105,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void toLoginActivity() {
-        button = findViewById(R.id.btnLogin1);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-    }
 
 
     public void writeFile(Context context) {
@@ -125,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void readXML(final Context context) {
-
+        WriteAndRead writeAndRead = WriteAndRead.getInstance();
+        writeAndRead.parseXML(context);
     }
 }
