@@ -1,16 +1,17 @@
 package com.example.youthcenter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,71 +20,123 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
+import java.util.ArrayList;
 
-    private Context context;
+class EventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private Context mContext;
     private PopupWindow popupWindow;
     private LayoutInflater layoutInflater;
     private Button openBtn, deleteBtn, dataChangedBtn, toFBBtn;
     private Switch isEveRun;
-
     public Events eList = Events.getInstance();
+    private static int TYPE_ADMIN = 1;
+    private static int TYPE_GUEST = 2;
+    private int resource;
 
+    public EventAdapter(Context context, int resource) {
+        this.mContext = context;
+        this.resource = resource;
 
-    public EventAdapter(Context context) {
-        this.context = context;
     }
+
 
     @NonNull
     @Override
-    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.event_list, null);
-        EventViewHolder holder = new EventViewHolder(view);
+        View view;
 
-        return holder;
-    }
-
-
-    @Override
-    public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-
-        Event event = eList.geteList().get(position);
-        holder.textViewTitle.setText("Otsikko: " + event.getTitle());
-        holder.textViewDate.setText("Päivämäärä: " + event.getDate() + "\t klo " + event.gettStart() + " - " + event.gettEnd());
-        holder.textViewAge.setText("Ikähaarukka: " + event.getAge());
-        holder.textViewDesc.setText("Lisätiedot: " + event.getDesc());
-        holder.textViewPlace.setText("Paikka: " + event.getPlace());
-        holder.textViewVisAmount.setText("Kävijälaskuri: \n" + event.getVisitorAmount());
-        holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher_background));
-        if (eList.geteList().get(position).isRunning() == true) {
-            holder.textViewIsRunning.setText(context.getResources().getText(R.string.isRunning));
-            holder.textViewIsRunning.setTextColor(context.getColor(R.color.isRunning));
-        } else {
-            holder.textViewIsRunning.setText(context.getResources().getText(R.string.isNotRunning));
-            holder.textViewIsRunning.setTextColor(context.getColor(R.color.isNotRunning));
+        if (viewType == TYPE_GUEST) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.event_list_guest, parent, false);
+            return new EventViewGuest(view);
         }
 
 
+        return new EventViewAdmin(LayoutInflater.from(mContext).inflate(R.layout.event_list, parent, false));
     }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == TYPE_GUEST) {
+
+            ArrayList<Event> event = eList.geteList();
+            ((EventViewGuest) holder).setEventDetail(event.get(position));
+        } else  {
+
+
+            ArrayList<Event> event = eList.geteList();
+            ((EventViewAdmin) holder).setEventDetail(event.get(position));
+
+        }
+    }
+
 
     @Override
     public int getItemCount() {
         return eList.geteList().size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
 
-    class EventViewHolder extends RecyclerView.ViewHolder {
+        if (resource == 1) {
+            return TYPE_ADMIN;
+        } else if (resource == 2) {
+            return TYPE_GUEST;
+        } else {
+            return super.getItemViewType(position);
+        }
+    }
+
+
+    class EventViewGuest extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView textViewTitle, textViewDesc, textViewPlace, textViewDate, textViewAge, textViewVisAmount, textViewIsRunning;
-        TextView textViewVisAmPop;
+        private TextView textViewTitle, textViewDesc, textViewPlace, textViewDate, textViewAge, textViewVisAmount, textViewIsRunning;
+        private TextView textViewVisAmPop;
+
+
+        public EventViewGuest(@NonNull View itemView) {
+            super(itemView);
+
+            imageView = itemView.findViewById(R.id.imageView);
+            textViewTitle = itemView.findViewById(R.id.textViewTitle);
+            textViewDesc = itemView.findViewById(R.id.textViewDesc);
+            textViewPlace = itemView.findViewById(R.id.textViewPlace);
+            textViewDate = itemView.findViewById(R.id.textViewDate);
+            textViewAge = itemView.findViewById(R.id.textViewAge);
+            textViewVisAmount = itemView.findViewById(R.id.visitorAmount);
+            textViewIsRunning = itemView.findViewById(R.id.tvIsRunning);
+        }
+
+        private void setEventDetail(Event event) {
+            textViewTitle.setText(event.getTitle());
+            textViewDate.setText("Päivämäärä: " + event.getDate() + "\t klo " + event.gettStart() + " - " + event.gettEnd());
+            textViewAge.setText("Ikähaarukka: " + event.getAge());
+            textViewDesc.setText("Lisätiedot: " + event.getDesc());
+            textViewPlace.setText("Paikka: " + event.getPlace());
+            textViewVisAmount.setText("Kävijälaskuri: \n" + event.getVisitorAmount());
+            imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_launcher_background));
+            if (event.isRunning() == true) {
+                textViewIsRunning.setText("KÄYNNISSÄ");
+                textViewIsRunning.setTextColor(mContext.getColor(R.color.isRunning));
+            } else {
+                textViewIsRunning.setText(mContext.getResources().getText(R.string.isNotRunning));
+                textViewIsRunning.setTextColor(mContext.getColor(R.color.isNotRunning));
+            }
+        }
+    }
+
+    class EventViewAdmin extends RecyclerView.ViewHolder {
+        private ImageView imageView;
+        private TextView textViewTitle, textViewDesc, textViewPlace, textViewDate, textViewAge, textViewVisAmount, textViewIsRunning;
+        private TextView textViewVisAmPop;
         Button increaseBtnPop, decreaseBtnPop;
         int visitorAm = 0;
         boolean isRunning;
 
         @SuppressLint("ResourceType")
-        public EventViewHolder(@NonNull final View itemView) {
+        public EventViewAdmin(@NonNull final View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
@@ -98,8 +151,23 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
             deleteEvent(itemView);
             openEvent(itemView);
+        }
 
-
+        private void setEventDetail(Event event) {
+            textViewTitle.setText(event.getTitle());
+            textViewDate.setText("Päivämäärä: " + event.getDate() + "\t klo " + event.gettStart() + " - " + event.gettEnd());
+            textViewAge.setText("Ikähaarukka: " + event.getAge());
+            textViewDesc.setText("Lisätiedot: " + event.getDesc());
+            textViewPlace.setText("Paikka: " + event.getPlace());
+            textViewVisAmount.setText("Kävijälaskuri: \n" + event.getVisitorAmount());
+            imageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_launcher_background));
+            if (event.isRunning() == true) {
+                textViewIsRunning.setText(mContext.getResources().getText(R.string.isRunning));
+                textViewIsRunning.setTextColor(mContext.getColor(R.color.isRunning));
+            } else {
+                textViewIsRunning.setText(mContext.getResources().getText(R.string.isNotRunning));
+                textViewIsRunning.setTextColor(mContext.getColor(R.color.isNotRunning));
+            }
         }
 
         public void deleteEvent(View v) {
@@ -118,121 +186,17 @@ class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
             openBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onButtonShowPopUpWindowClick(itemView);
+                    //onButtonShowPopUpWindowClick(itemView);
+                    Intent intent = new Intent(mContext, EditEventActivity.class);
+                    intent.putExtra("position", getAdapterPosition());
+                    intent.putExtra("admin", true);
+                    mContext.startActivity(intent);
+                    notifyDataSetChanged();
                 }
             });
 
         }
 
-        public void decreaseVisAm(View v) {
-            decreaseBtnPop = v.findViewById(R.id.decreaseBtnPop);
-
-            decreaseBtnPop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    visitorAm--;
-                    textViewVisAmPop.setText(String.valueOf(visitorAm));
-                }
-            });
-        }
-
-        public void increaseVisAm(View v) {
-            increaseBtnPop = v.findViewById(R.id.increaseBtnPop);
-            increaseBtnPop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    visitorAm++;
-                    textViewVisAmPop.setText(String.valueOf(visitorAm));
-                }
-            });
-        }
-
-        public void onUpdateVisAm(View v, final PopupWindow popupWin) {
-
-            dataChangedBtn = v.findViewById(R.id.dataChangedBtn);
-            dataChangedBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    visitorAm = Integer.parseInt(textViewVisAmPop.getText().toString());
-                    eList.geteList().get(getAdapterPosition()).setRunning(isRunning);
-                    eList.geteList().get(getAdapterPosition()).setVisitorAmount(visitorAm);
-                    notifyItemChanged(getAdapterPosition());
-                    popupWin.dismiss();
-                }
-            });
-
-        }
-
-        public void toFeedBackActivity(View v) {
-            toFBBtn = v.findViewById(R.id.toFeedBtn);
-
-            toFBBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    context.startActivity(new Intent(context, FeedbackActivity.class));
-                }
-            });
-        }
-
-        public void checkSwitch(View v) {
-            isEveRun = v.findViewById(R.id.swIsRunningPop);
-            if (eList.geteList().get(getAdapterPosition()).isRunning() == true) {
-                isEveRun.setChecked(true);
-            } else {
-                isEveRun.setChecked(false);
-            }
-
-            isEveRun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        isEveRun.setTextOn("ON");
-                        Toast.makeText(context.getApplicationContext(), "Tapahtuma käynnissä.", Toast.LENGTH_SHORT).show();
-                        isRunning = true;
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), "Tapahtuma ei käynnissä.", Toast.LENGTH_SHORT).show();
-                        isEveRun.setTextOff("OFF");
-                        isRunning = false;
-                    }
-                }
-            });
-
-
-
-        }
-
-        public void onButtonShowPopUpWindowClick(View view) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            final View popupView = inflater.inflate(R.layout.popup_event, null);
-            int width = LinearLayout.LayoutParams.MATCH_PARENT;
-            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-            boolean focusable = true;
-
-            PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
-
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-            textViewVisAmPop = popupView.findViewById(R.id.visitorAmountPop);
-            dataChangedBtn = popupView.findViewById(R.id.dataChangedBtn);
-
-            textViewVisAmPop.setText(String.valueOf(eList.getEvent(getAdapterPosition()).getVisitorAmount()));
-            visitorAm = eList.geteList().get(getAdapterPosition()).getVisitorAmount();
-
-            decreaseVisAm(popupView);
-            increaseVisAm(popupView);
-            checkSwitch(popupView);
-            onUpdateVisAm(popupView, popupWindow);
-            toFeedBackActivity(popupView);
-
-            popupWindow.update();
-        }
-
-        public  void readXML() {
-            WriteAndRead writeAndRead = WriteAndRead.getInstance();
-            writeAndRead.parseXML(context);
-            notifyItemInserted(getAdapterPosition());
-        }
     }
 }
 

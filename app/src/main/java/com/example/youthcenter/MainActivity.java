@@ -2,6 +2,7 @@ package com.example.youthcenter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
@@ -21,11 +22,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private Button button;
-    private String fileXML = "data.xml";
     RecyclerView recyclerView;
-    private Button feedBackBtn, readXMLBtn;
+    private String username;
+    private Intent intent;
+    EventAdapter adapter = null;
+    Boolean admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +35,29 @@ public class MainActivity extends AppCompatActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        intent = getIntent();
+        if (intent.hasExtra("username")) {
+            username = intent.getStringExtra("username");
+            if (username.contains("admin")) {
+                admin = true;
+            } else {
+                admin = false;
+            }
+        } else if (intent.hasExtra("admin")) {
+            admin = intent.getBooleanExtra("admin", true);
+        } else {
+            admin = false;
+        }
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //Settings all methods
 
-        //toLoginActivity();
+        //Implements all methods
         addEvent();
         recyclerView();
-
-
+        update();
         writeFile(this);
         readXML(this);
 
@@ -55,16 +67,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
-
-
-        if (username.contains("admin")) {
+        if (admin == true) {
             menu.add(0, 0, Menu.NONE, "Asetukset");
             menu.add(0, 1, Menu.NONE, "Tapahtumat");
-        } else if (username.contains("guest")) {
-            menu.add(0, 0, Menu.NONE, "");
+        } else if (username.contains("guest")){
+            menu.add(0, 0, Menu.NONE, "Asetukset");
+        } else {
+
         }
+
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options, menu);
         return true;
@@ -78,6 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 0:
                 startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(this, EventsViewActivity.class));
+                break;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -87,25 +104,39 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        EventAdapter adapter = new EventAdapter(this);
+        if (admin == true) {
+            adapter = new EventAdapter(this, 1);
+        } else {
+            adapter = new EventAdapter(this, 2);
+        }
+
         recyclerView.setAdapter(adapter);
     }
 
 
     public void addEvent() {
-
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setAlpha(0.7f);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (admin == true) {
+
+            fab.setAlpha(0.7f);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
+                    intent.putExtra("admin", admin);
+
+                    startActivity(intent);
+                }
+            });
+        } else {
+            fab.hide();
+        }
+
     }
 
-
+    public void update() {
+        adapter.notifyDataSetChanged();
+    }
 
 
     public void writeFile(Context context) {
@@ -119,4 +150,6 @@ public class MainActivity extends AppCompatActivity {
         WriteAndRead writeAndRead = WriteAndRead.getInstance();
         writeAndRead.parseXML(context);
     }
+
+
 }

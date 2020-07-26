@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class    CreateEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     Button addEvent, etDate, etTimeStart, etTimeEnd, decreaseBtn, increaseBtn;
     EditText etTitle, etAge, etPlace, etDesc;
     TextView textVisitorAmount, textViewIsRunning;
@@ -32,9 +32,9 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
     private int timePicker;
     private int visitorAmount = 0;
     private boolean isRunning;
+    private boolean admin;
 
 
-    static final int TIME_DIALOG_ID = 999;
     Events eList = Events.getInstance();
 
     @Override
@@ -55,7 +55,8 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
         decreaseBtn = (Button) findViewById(R.id.decreaseBtn1);
         increaseBtn = (Button) findViewById(R.id.increaseBtn1);
         textVisitorAmount = (TextView) findViewById(R.id.tvVisAmount);
-
+        Intent intent = getIntent();
+        admin = intent.getBooleanExtra("admin", true);
         //EventIsRunning
         textViewIsRunning = findViewById(R.id.swIsRunning);
 
@@ -138,7 +139,7 @@ public class CreateEventActivity extends AppCompatActivity implements DatePicker
 
 
                 eList.AddToArray(new Event(etTitle.getText().toString(), etDate.getText().toString(), etTimeStart.getText().toString(), etTimeEnd.getText().toString(), etAge.getText().toString(), etPlace.getText().toString(), etDesc.getText().toString(), Integer.parseInt(textVisitorAmount.getText().toString()), 1, isRunning));
-
+                intent.putExtra("admin", admin);
                 startActivity(intent);
             }
         });
