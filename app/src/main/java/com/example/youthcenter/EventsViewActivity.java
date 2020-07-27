@@ -25,6 +25,7 @@ public class EventsViewActivity extends AppCompatActivity {
     ListView listView;
     Intent intent;
     ArrayList<Event> eList = Events.getInstance().geteList();
+    ArrayList<Feedback> fList = FeedbackList.getInstance().getFeedbackArrayList();
     ListAdapter adapter;
 
     @Override
@@ -36,7 +37,7 @@ public class EventsViewActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
 
-        adapter = new ListAdapter(this, eList);
+        adapter = new ListAdapter(this, eList, fList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

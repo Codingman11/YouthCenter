@@ -34,7 +34,7 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
 
     ArrayList<Event> eList = Events.getInstance().geteList();
     EditText etTitle, etAge, etPlace, etDesc;
-    Button updateEvent, etDate, etTimeStart, etTimeEnd, decreaseBtn, increaseBtn;
+    Button updateEvent, etDate, etTimeStart, etTimeEnd, decreaseBtn, increaseBtn, feedbackBtn;
     TextView textVisitorAmount, textViewIsRunning;
     Switch aSwitch;
 
@@ -69,13 +69,13 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
         textVisitorAmount = (TextView) findViewById(R.id.tvEditVisAmount);
         visitorAmount = eList.get(position).getVisitorAmount();
         aSwitch = (Switch) findViewById(R.id.swEditIsRunning);
-
+        feedbackBtn = (Button) findViewById(R.id.toFeedBtn);
         //Button for addEvent
         updateEvent = findViewById(R.id.updateEvent);
 
 
         initEvent(v);
-
+        toFeedbackActivity();
         //AddEvent button
         dateTimePicker();
         changeVisitors();
@@ -151,6 +151,17 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 DialogFragment dialogFragment = new TimePickerFragment();
                 dialogFragment.show(getSupportFragmentManager(), "timeEnd");
 
+            }
+        });
+    }
+
+    public void toFeedbackActivity() {
+        feedbackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditEventActivity.this, FeedbackActivity.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
             }
         });
     }

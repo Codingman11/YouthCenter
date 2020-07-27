@@ -101,7 +101,9 @@ public class Event implements Serializable {
 
     public void setRunning(boolean running) { isRunning = running; }
 
-    public void changeText() {
-
+    private FeedbackList feedbackList = new FeedbackList();
+    public FeedbackList getFeedbackList () {
+        return feedbackList;
     }
+
 }

@@ -8,16 +8,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
     Activity context;
     ArrayList<Event> eList;
+    ArrayList<Feedback> fList;
+    Feedback feedback;
     private static LayoutInflater inflater = null;
 
-    public ListAdapter(Activity context, ArrayList<Event> events) {
+    public ListAdapter(Activity context, ArrayList<Event> events, ArrayList<Feedback> feedbacks) {
         this.context = context;
         this.eList = events;
+        this.fList = feedbacks;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -43,9 +48,16 @@ public class ListAdapter extends BaseAdapter {
 
         TextView textViewTitle = (TextView) itemView.findViewById(R.id.tvTitle1);
         TextView textViewDate = (TextView) itemView.findViewById(R.id.tvDate);
+        TextView textViewFeedback = (TextView) itemView.findViewById(R.id.feedbacks);
+
+
         Event event = eList.get(position);
         textViewTitle.setText(event.getTitle());
         textViewDate.setText("Päivämäärä: " + event.getDate() + "\n Kellonaika: " + event.gettStart() + ":" + event.gettEnd());
+        if (!fList.isEmpty()) {
+            feedback = fList.get(position);
+            textViewFeedback.setText("Arvosana: " + feedback.getRating() + "\nPalaute: " + feedback.getFeedback() );
+        }
         return itemView;
     }
 }

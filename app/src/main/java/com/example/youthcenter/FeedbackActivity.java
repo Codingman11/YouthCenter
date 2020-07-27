@@ -1,5 +1,6 @@
 package com.example.youthcenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,18 +12,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class FeedbackActivity extends AppCompatActivity {
 
-    private FeedbackList feedbackList;
+
     private Button sendFeedbackBtn;
     private TextView checkFeedback;
     private EditText etFeedback;
     private RatingBar ratingBar;
+    private FeedbackList fList;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
-        feedbackList = FeedbackList.getInstance();
+        Intent intent = getIntent();
+        position = intent.getIntExtra("position", 0);
+
 
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
@@ -34,10 +39,11 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     public void sendFeedback() {
+        fList = Events.getInstance().getEvent(position).getFeedbackList();
         sendFeedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                feedbackList.addFeedback(new Feedback(etFeedback.getText().toString(), String.valueOf(ratingBar.getRating())));
+                fList.addFeedback(new Feedback(etFeedback.getText().toString(), String.valueOf(ratingBar.getRating())));
                 finish();
             }
         });
