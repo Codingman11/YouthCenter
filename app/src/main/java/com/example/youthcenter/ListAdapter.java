@@ -19,10 +19,9 @@ public class ListAdapter extends BaseAdapter {
     Feedback feedback;
     private static LayoutInflater inflater = null;
 
-    public ListAdapter(Activity context, ArrayList<Event> events, ArrayList<Feedback> feedbacks) {
+    public ListAdapter(Activity context, ArrayList<Event> events) {
         this.context = context;
         this.eList = events;
-        this.fList = feedbacks;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -54,10 +53,17 @@ public class ListAdapter extends BaseAdapter {
         Event event = eList.get(position);
         textViewTitle.setText(event.getTitle());
         textViewDate.setText("Päivämäärä: " + event.getDate() + "\n Kellonaika: " + event.gettStart() + ":" + event.gettEnd());
+
+        fList = eList.get(position).getFeedbackList();
+
         if (!fList.isEmpty()) {
-            feedback = fList.get(position);
-            textViewFeedback.setText("Arvosana: " + feedback.getRating() + "\nPalaute: " + feedback.getFeedback() );
+            feedback = fList.listIterator().next();
+            textViewFeedback.setText("Arvosana: " + feedback.getRating() + "\nPalaute: " + feedback.getFeedback());
         }
+
+
+
+
         return itemView;
     }
 }

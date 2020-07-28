@@ -2,7 +2,7 @@ package com.example.youthcenter;
 
 import java.util.ArrayList;
 
-class FeedbackList {
+class FeedbackList extends ArrayList<Feedback> {
 
     private static FeedbackList feedbackList;
     private ArrayList<Feedback> feedbackArrayList;

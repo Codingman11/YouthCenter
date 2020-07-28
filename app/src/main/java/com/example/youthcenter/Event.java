@@ -8,6 +8,7 @@ public class Event implements Serializable {
     private String title, date, tStart, tEnd, age, place, desc;
     private int image, visitorAmount = 0;
     private boolean isRunning;
+    private FeedbackList feedbackList;
 
     public Event(String title, String date, String tStart, String tEnd, String age, String place, String desc, int visitorAmount, int image, boolean isRunning) {
 
@@ -22,6 +23,7 @@ public class Event implements Serializable {
         this.visitorAmount = visitorAmount;
         this.image = image;
         this.isRunning = isRunning;
+        this.feedbackList = new FeedbackList();
     }
 
 
@@ -101,9 +103,7 @@ public class Event implements Serializable {
 
     public void setRunning(boolean running) { isRunning = running; }
 
-    private FeedbackList feedbackList = new FeedbackList();
-    public FeedbackList getFeedbackList () {
+    public FeedbackList getFeedbackList() {
         return feedbackList;
     }
-
 }

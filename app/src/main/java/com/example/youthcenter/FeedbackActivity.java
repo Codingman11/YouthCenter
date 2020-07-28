@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class FeedbackActivity extends AppCompatActivity {
 
 
@@ -17,7 +19,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private TextView checkFeedback;
     private EditText etFeedback;
     private RatingBar ratingBar;
-    private FeedbackList fList;
+    private ArrayList<Feedback> fList;
     private int position;
 
     @Override
@@ -40,10 +42,12 @@ public class FeedbackActivity extends AppCompatActivity {
 
     public void sendFeedback() {
         fList = Events.getInstance().getEvent(position).getFeedbackList();
+
         sendFeedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fList.addFeedback(new Feedback(etFeedback.getText().toString(), String.valueOf(ratingBar.getRating())));
+                fList.add(new Feedback(etFeedback.getText().toString(), String.valueOf(ratingBar.getRating())));
+
                 finish();
             }
         });
