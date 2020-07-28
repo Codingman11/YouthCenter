@@ -29,7 +29,6 @@ public class WriteAndRead {
 
     private ContextWrapper contextWrapper;
     Events events = null;
-    private String file;
     private static WriteAndRead writeAndRead = null;
 
     public static WriteAndRead getInstance() {

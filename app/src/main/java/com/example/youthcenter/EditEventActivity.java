@@ -195,7 +195,6 @@ public class EditEventActivity extends AppCompatActivity implements DatePickerDi
                 eList.set(position, event);
                 Intent intent = new Intent(EditEventActivity.this, MainActivity.class);
                 intent.putExtra("admin", admin);
-                System.out.println(Events.getInstance().getEvent(position).getFeedbackList().get(0).getFeedback());
 
                 startActivity(intent);
             }
